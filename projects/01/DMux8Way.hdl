@@ -1,0 +1,72 @@
+// This file is part of www.nand2tetris.org
+// and the book "The Elements of Computing Systems"
+// by Nisan and Schocken, MIT Press.
+// File name: projects/01/DMux8Way.hdl
+
+/**
+ * 8-way demultiplexor:
+ * {a, b, c, d, e, f, g, h} = {in, 0, 0, 0, 0, 0, 0, 0} if sel == 000
+ *                            {0, in, 0, 0, 0, 0, 0, 0} if sel == 001
+ *                            etc.
+ *                            {0, 0, 0, 0, 0, 0, 0, in} if sel == 111
+ */
+
+CHIP DMux8Way {
+    IN in, sel[3];
+    OUT a, b, c, d, e, f, g, h;
+
+    PARTS:
+    
+    /* Implementation using the basic building components 
+        // Get the complement values of the selection bits
+        Not(in = sel[0], out = notsel0);
+        Not(in = sel[1], out = notsel1);
+        Not(in = sel[2], out = notsel2);
+
+        // Logic to set a = in if sel == 000 
+        And(a = notsel0, b = in, out = temp1);
+        And(a = notsel1, b = temp1, out = temp2);
+        And(a = notsel2, b = temp2, out = a);
+
+        // Logic to set b = in if sel == 001
+        And(a = sel[0], b = in, out = temp3);
+        And(a = notsel1, b = temp3, out = temp4);
+        And(a = notsel2, b = temp4, out = b);
+
+        // Logic to set c = in if sel == 010
+        And(a = notsel0, b = in, out = temp5);
+        And(a = sel[1], b = temp5, out = temp6);
+        And(a = notsel2, b = temp6, out = c);
+
+        // Logic to set d = in if sel == 011
+        And(a = sel[0], b = in, out = temp7);
+        And(a = sel[1], b = temp7, out = temp8);
+        And(a = notsel2, b = temp8, out = d);
+
+        // Logic to set e = in if sel == 100
+        And(a = notsel0, b = in, out = temp9);
+        And(a = notsel1, b = temp9, out = tempA);
+        And(a = sel[2], b = tempA, out = e);
+
+        // Logic to set f = in if sel == 101
+        And(a = sel[0], b = in, out = tempB);
+        And(a = notsel1, b = tempB, out = tempC);
+        And(a = sel[2], b = tempC, out = f);
+
+        // Logic to set g = in if sel == 110
+        And(a = notsel0, b = in, out = tempD);
+        And(a = sel[1], b = tempD, out = tempE);
+        And(a = sel[2], b = tempE, out = g);
+
+        // Logic to set h = in if sel == 111
+        And(a = sel[0], b = in, out = tempF);
+        And(a = sel[1], b = tempF, out = tempG);
+        And(a = sel[2], b = tempG, out = h);
+    */
+
+    // Using the built-in DMux4Way chip
+    DMux(in = in, sel = sel[2], a = temp0, b = temp1);
+    DMux4Way(in = temp0, sel[0] = sel[0], sel[1] = sel[1], a = a, b = b, c = c, d = d);
+    DMux4Way(in = temp1, sel[0] = sel[0], sel[1] = sel[1], a = e, b = f, c = g, d = h);
+
+}
