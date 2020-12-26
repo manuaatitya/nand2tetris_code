@@ -1,0 +1,47 @@
+// This file is part of www.nand2tetris.org
+// and the book "The Elements of Computing Systems"
+// by Nisan and Schocken, MIT Press.
+// File name: projects/01/Xor.hdl
+
+/**
+ * Exclusive-or gate:
+ * out = not (a == b)
+ */
+
+CHIP Xor {
+    IN a, b;
+    OUT out;
+
+    PARTS:
+    // A XOR B = A(bar).B + B(bar).A
+    
+    // Building not gates using Nand gates
+    // Nand(a = a, b = a, out = nota);
+    // Nand(a = b, b = b, out = notb);
+
+    // Since we have use not gate before using that chip we get 
+    Not(in = a, out = nota);
+    Not(in = b, out = notb);
+    
+    // Implement A(bar).B using NAND gate
+    // Nand(a = nota, b = b, out = temp);
+    // Nand(a = temp, b = temp, out = abarb);
+
+    // Implement A(bar).B using NOT gate
+    And(a = nota, b = b, out = abarb);
+
+    // Implement B(bar).A using NAND Gate
+    // Nand(a = notb, b = a, out = temp0);
+    // Nand(a = temp0, b = temp, out = bbara);
+
+    // Implement B(bar).A using AND gate
+    And(a = notb, b = a, out = bbara);
+
+    // Implement A(bar).B or B(bar).A using NAND Gate
+    // Nand(a = abarb, b = abarb, out = temp1);
+    // Nand(a = bbara, b = bbara, out = temp2);
+    // Nand(a = temp1, b = temp2, out = out);
+
+    // Implement A(bar).B or B(bar).A using OR Gate
+    Or(a = abarb, b = bbara, out = out);
+}
